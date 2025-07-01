@@ -7,6 +7,14 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     'nuxt-lucide-icons',
-    'shadcn-nuxt'
-  ]
+    'shadcn-nuxt',
+    'nuxt-open-fetch'
+  ],
+  openFetch: {
+    clients: {
+      // pets: {
+      //   baseURL: 'https://petstore3.swagger.io/api/v3'
+      // }
+    }
+  }
 })
