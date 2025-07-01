@@ -4,5 +4,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   pages: true,
   ssr: false,
-  modules: ['@nuxtjs/tailwindcss']
+  modules: [
+    '@nuxtjs/tailwindcss',
+    'nuxt-lucide-icons',
+    'shadcn-nuxt'
+  ]
 })
