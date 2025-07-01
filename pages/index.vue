@@ -8,9 +8,10 @@ function onClick() {
   popup.showAlert('Привет!')
   // или popup.showConfirm('Ты уверен?', confirmed => ...)
 }
+const { token } = await useAuth()
 </script>
 
 <template>
   <h1>Index page</h1>
-  <tg-main-button text="Нажми меня" @click="onClick" />
+  <p>{{ token }}</p>
 </template>
