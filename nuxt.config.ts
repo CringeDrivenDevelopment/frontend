@@ -1,6 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import fs from 'fs';
 
+const httpsConfig = fs.existsSync('./.cert/localhost-key.pem')
+  ? {
+      key: fs.readFileSync('./.cert/localhost-key.pem').toString(),
+      cert: fs.readFileSync('./.cert/localhost.pem').toString(),
+    }
+  : undefined
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
@@ -21,10 +28,7 @@ export default defineNuxtConfig({
     }
   },
   devServer: {
-    https: {
-      key: fs.readFileSync('./.cert/localhost-key.pem').toString(),
-      cert: fs.readFileSync('./.cert/localhost.pem').toString(),
-    },
+    https: httpsConfig,
     host: '0.0.0.0',
     port: 443,
   },
