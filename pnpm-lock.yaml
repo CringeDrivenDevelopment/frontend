@@ -20,6 +20,9 @@ importers:
       vue-router:
         specifier: ^4.5.1
         version: 4.5.1(vue@3.5.17(typescript@5.8.3))
+      vue-tg:
+        specifier: 0.9.0-beta.9
+        version: 0.9.0-beta.9(vue@3.5.17(typescript@5.8.3))
     devDependencies:
       '@nuxt/devtools':
         specifier: 2.5.0
@@ -3574,6 +3577,11 @@ packages:
     resolution: {integrity: sha512-ogAF3P97NPm8fJsE4by9dwSYtDwXIY1nFY9T6DyQnGHd1E2Da94w9JIolpe42LJGIl0DwOHBi8TcRPlPGwbTtw==}
     peerDependencies:
       vue: ^3.2.0
+
+  vue-tg@0.9.0-beta.9:
+    resolution: {integrity: sha512-aOttT04ZZmfDwoOsD8PXYb8YkfU75AA+qJW6LyTg7yqZKgL10cH3tKOku86Q/6BmfV/dtr7BKDxOs3C3CpaSiQ==}
+    peerDependencies:
+      vue: ^3
 
   vue@3.5.17:
     resolution: {integrity: sha512-LbHV3xPN9BeljML+Xctq4lbz2lVHCR6DtbpTf5XIO6gugpXUN49j2QQPcMj086r9+AkJ0FfUT8xjulKKBkkr9g==}
@@ -7565,6 +7573,10 @@ snapshots:
   vue-router@4.5.1(vue@3.5.17(typescript@5.8.3)):
     dependencies:
       '@vue/devtools-api': 6.6.4
+      vue: 3.5.17(typescript@5.8.3)
+
+  vue-tg@0.9.0-beta.9(vue@3.5.17(typescript@5.8.3)):
+    dependencies:
       vue: 3.5.17(typescript@5.8.3)
 
   vue@3.5.17(typescript@5.8.3):

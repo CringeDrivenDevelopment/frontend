@@ -13,7 +13,8 @@
     "nuxt": "^3.17.5",
     "tailwindcss": "^4.1.11",
     "vue": "^3.5.17",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "vue-tg": "0.9.0-beta.9"
   },
   "devDependencies": {
     "@nuxt/devtools": "2.5.0",
