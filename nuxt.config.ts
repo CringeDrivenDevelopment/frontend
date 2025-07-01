@@ -14,9 +14,10 @@ export default defineNuxtConfig({
   ],
   openFetch: {
     clients: {
-      // pets: {
-      //   baseURL: 'https://petstore3.swagger.io/api/v3'
-      // }
+      api: {
+        schema: 'https://cloud.lxft.tech/openapi.yaml',
+        baseURL: 'https://cloud.lxft.tech/',
+      }
     }
   },
   devServer: {
