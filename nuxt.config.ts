@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   pages: true,
   ssr: false,
-  css: ['~/assets/css/tailwind.css'],
+  css: ['~/assets/css/tailwind.css', '~/assets/css/main.css'],
   modules: [
     '@nuxtjs/tailwindcss',
     'nuxt-lucide-icons',

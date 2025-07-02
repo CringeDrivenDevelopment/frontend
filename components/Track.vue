@@ -1,22 +1,33 @@
 <template>
   <div class="w-full flex justify-between items-center rounded-lg cursor-pointer transition-colors hover:bg-indigo-300/10 p-2 group">
     <div class="flex items-center gap-3">
-      <div class="rounded-lg size-13 aspect-square relative">
+      <div class="rounded-lg size-13 aspect-square relative" @click="playing = !playing">
         <div class="w-full h-full rounded-lg bg-indigo-500/40 absolute top-0 z-20 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity">
-          <LucideCirclePlay :size="27" class="hover:text-indigo-100 transition-colors duration-200" />
+          <LucideCirclePlay :size="27" class="hover:text-indigo-100 transition-colors duration-200" v-if="!playing" />
+          <LucideCirclePause :size="27" class="hover:text-indigo-100 transition-colors duration-200" v-if="playing" />
         </div>
-        <img :src="track.thumbnail" alt="Обложка" class="rounded-lg w-full h-full absolute top-0 z-0">
+        <img :src="track.thumbnail" alt="Обложка" class="rounded-lg w-full h-full absolute top-0 z-0 select-none">
       </div>
       <div class="flex flex-wrap content-between">
         <div class="w-full flex gap-2 items-center">
-          <span class="text-lg font-medium whitespace-nowrap truncate w-35">{{ track.title }}</span>
-          <LucideCircleAlert :size="15" v-if="track.explicit" />
+          <span class="text-lg font-medium whitespace-nowrap truncate max-w-35">{{ track.title }}</span>
+          <UiTooltipProvider>
+            <UiTooltip>
+              <UiTooltipTrigger>
+                <LucideCircleAlert :size="15" v-if="track.explicit" />
+              </UiTooltipTrigger>
+              <UiTooltipContent>Нецензурная лексика</UiTooltipContent>
+            </UiTooltip>
+          </UiTooltipProvider>
         </div>
         <span class="w-full text-md text-neutral-400">{{ track.authors }}</span>
       </div>
     </div>
-    <div>
-      <LucideX :size="27" class="hover:text-indigo-400 transition-colors duration-200" />
+    <div class="flex gap-3 items-center">
+      <LucideX :size="27" class="hover:text-red-400 transition-colors duration-200" v-if="mode == 'accepted'" />
+      <LucideCircleCheck :size="27" class="hover:text-green-400 transition-colors duration-200" v-if="mode == 'moderation'" />
+      <LucideBan :size="27" class="hover:text-red-400 transition-colors duration-200" v-if="mode == 'moderation'" />
+      <LucidePlus :size="27" class="hover:text-indigo-400 transition-colors duration-200" v-if="mode == 'suggest'" />
     </div>
   </div>
 </template>
@@ -25,10 +36,11 @@
 import type { components } from '#open-fetch-schemas/api';
 
 defineProps<{
-  track: components['schemas']['Track']
+  track: components['schemas']['Track'],
+  mode: 'moderation' | 'accepted' | 'suggest',
 }>()
 
-const MAX_SYMBOLS = 17;
+const playing = ref(false);
 
 </script>
 

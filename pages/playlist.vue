@@ -1,8 +1,12 @@
 <template>
-  <div class="flex justify-center flex-wrap w-full text-white">
-    <div class="w-4/5 font-medium text-2xl">Плейлист</div>
-    <div class="w-4/5 pt-5 flex flex-wrap gap-2">
-      <Track v-for="track in tracks" :key="track.id" :track="track" />
+  <div class="flex justify-center flex-wrap w-full text-white gap-3 py-3">
+    <div class="w-full font-medium text-2xl">В плейлисте</div>
+    <div class="flex flex-wrap gap-2">
+      <Track v-for="track in tracks" :key="track.id" :track="track" mode="accepted" />
+    </div>
+    <div class="w-full font-medium text-2xl">На модерации</div>
+    <div class="flex flex-wrap gap-2">
+      <Track v-for="track in tracks" :key="track.id" :track="track" mode="moderation" />
     </div>
   </div>
 </template>

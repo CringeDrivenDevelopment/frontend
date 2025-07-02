@@ -1,21 +1,21 @@
 <script lang="ts" setup>
-const inputText = ref('')
+const model = defineModel<string>();
 
 function clearSearch() {
-  inputText.value = ''
+  model.value = ''
 }
 
+const emits = defineEmits<{
+  (e: 'update:inputText', payload: string): void
+}>()
 </script>
 
 <template>
-  <div class="flex items-center w-full px-3 transition-all duration-300 rounded-md focus-within:ring-2 group bg-secondary ring-primary">
+  <div class="flex items-center w-full px-3 transition-all duration-300 rounded-md focus-within:ring-1 focus-within:ring-white group bg-gray-800 ring-primary">
     <LucideSearch class="size-5 stroke-muted" />
-    <Input v-model="inputText" class="bg-transparent" placeholder="Поиск по игрокам" :noFocusRing="true" />
-    <LucideX v-if="inputText" class="cursor-pointer size-5 stroke-white" @click="clearSearch" />
+    <UiInput v-model="model" class="bg-transparent" placeholder="Поиск треков" :noFocusRing="true" />
+    <LucideX v-if="model" class="cursor-pointer size-5 stroke-white" @click="clearSearch" />
   </div>
-
-
-
 </template>
 
 <style>

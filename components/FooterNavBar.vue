@@ -1,5 +1,5 @@
 <template>
-  <div class="h-16 bg-white/5 text-white flex items-center justify-center">
+  <div class="h-16 bg-slate-800 text-white flex items-center justify-center">
     <nav class="w-full flex items-center justify-around">
       <NuxtLink to="/playlist">
         <LucideListCheck class="size-8" :class="{'text-indigo-300': route.name === 'playlist'}" />
