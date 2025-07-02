@@ -8,10 +8,9 @@ function onClick() {
   popup.showAlert('Привет!')
   // или popup.showConfirm('Ты уверен?', confirmed => ...)
 }
-const { token } = await useAuth()
+
 </script>
 
 <template>
   <h1>Index page</h1>
-  <p>{{ token }}</p>
 </template>

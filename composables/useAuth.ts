@@ -1,19 +1,23 @@
 import { useMiniApp } from 'vue-tg'
-import { useCookie } from '#app'
+import { useCookie, useState } from '#app'
 
-export async function useAuth() {
+const tokenState = useState<string | null>('auth_token', () => null)
+
+export function useAuth() {
+  const token = readonly(tokenState)
+  return { token, initSession }
+}
+
+async function initSession() {
   const tg = useMiniApp()
   const { $api } = useNuxtApp()
-
   const initDataCookie = useCookie('tg_init_data')
 
   let initData = tg.initData
 
   if (initData && initData !== 'user') {
-    // ✅ Telegram WebApp передал initData — сохраняем в cookie
     initDataCookie.value = initData
   } else if (initDataCookie.value) {
-    // 🔁 Повторный запуск / обновление — берём из cookie
     initData = initDataCookie.value
   } else {
     throw new Error('❌ Нет initData: открой через Telegram')
@@ -28,7 +32,5 @@ export async function useAuth() {
     }
   })
 
-  return {
-    token: res.token,
-  }
+  tokenState.value = res.token
 }
