@@ -44,7 +44,7 @@
             </UiTooltip>
           </UiTooltipProvider>
         </div>
-        <span class="w-full text-md text-neutral-400">{{ track.authors === "" ? "Неизвестен" : track.authors }}</span>
+        <span class="w-full text-md text-neutral-400">{{ formatSeconds(track.length) + ' - ' + (track.authors === "" ? "Неизвестен" : track.authors) }}</span>
       </div>
     </div>
     <div class="flex gap-3 items-center">
@@ -78,6 +78,7 @@
 
 <script lang="ts" setup>
 import type { components } from "#open-fetch-schemas/api";
+import { formatSeconds } from '~/lib/utils';
 
 defineProps<{
   track: components["schemas"]["Track"];
