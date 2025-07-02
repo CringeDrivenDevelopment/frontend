@@ -1,9 +1,8 @@
 import { useMiniApp } from 'vue-tg'
 import { useCookie, useState } from '#app'
 
-const tokenState = useState<string | null>('auth_token', () => null)
-
 export function useAuth() {
+  const tokenState = useState<string | null>('auth_token', () => null)
   const token = readonly(tokenState)
   return { token, initSession }
 }
@@ -32,5 +31,7 @@ async function initSession() {
     }
   })
 
+  const tokenState = useState<string | null>('auth_token', () => null)
   tokenState.value = res.token
+  return true
 }

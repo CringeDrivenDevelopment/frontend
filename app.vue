@@ -8,10 +8,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const { initSession } = await useAuth()
-onMounted(() => {
-  initSession()
-})
-</script>
