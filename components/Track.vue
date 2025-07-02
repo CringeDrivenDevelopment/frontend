@@ -1,24 +1,37 @@
 <template>
   <div
     class="w-full flex justify-between items-center rounded-lg cursor-pointer transition-colors hover:bg-indigo-300/10 p-2 text-white"
-    :class="playing ? 'bg-indigo-300/10' : ''"
-    @click="playing = !playing"
+    :class="isCurrent ? 'bg-indigo-300/10' : ''"
+    @click="handleTrackClick"
   >
+    <AudiostreamPlayer 
+      ref="playerRef"
+      :invisible="true"
+      :src="audioUrl"
+      @play="onPlay"
+      @pause="onPause"
+      @timeUpdate="onTimeUpdate"
+      @ended="onEnded"
+      @error="onError"
+    />
     <div class="flex items-center gap-3 flex-1 min-w-0">
       <div class="rounded-lg size-13 aspect-square relative">
         <div
           class="w-full h-full rounded-lg absolute top-0 z-20 flex justify-center items-center group hover:bg-indigo-500/40 transition-colors"
-          :class="playing ? 'bg-indigo-500/40' : ''"
+          :class="isCurrent ? 'bg-indigo-500/40' : ''"
         >
+          <!-- Показываем play если трек не играет (даже если он текущий но на паузе) -->
           <LucideCirclePlay
             :size="27"
-            class="hover:text-indigo-100 group-hover:opacity-100 opacity-0 transition-colors duration-200"
-            v-if="!playing"
+            class="hover:text-indigo-100 transition-colors duration-200"
+            :class="isCurrent && !isPlaying ? 'opacity-100' : 'group-hover:opacity-100 opacity-0'"
+            v-if="!isPlaying"
           />
+          <!-- Показываем pause только когда трек активно играет -->
           <LucideCirclePause
             :size="27"
             class="hover:text-indigo-100 transition-colors duration-200"
-            v-if="playing"
+            v-if="isPlaying"
           />
         </div>
         <img
@@ -80,18 +93,68 @@
 </template>
 
 <script lang="ts" setup>
+import type { AudiostreamPlayer } from "#components";
 import type { components } from "#open-fetch-schemas/api";
 import { formatSeconds } from "~/lib/utils";
+import { useGlobalPlayer } from "~/composables/useGlobalPlayer";
 
-defineProps<{
+const props = defineProps<{
   track: components["schemas"]["Track"];
   mode: "moderation" | "accepted" | "suggest";
 }>();
 
-const playing = ref(false);
+const globalPlayer = useGlobalPlayer();
 
-// TODO:
-// никита надо сделать короче чтобы когда ставилось на паузу, то выделение с трека и обложки не пропадало, а кнопка play оставалась (ну типо чтобы запустить снова можно было), когда будешь делать проигрывание треков - реализуй и это
+// Создаем уникальный ID для трека (можно использовать track.id если есть)
+const trackId = computed(() => `track-${props.track.title}-${props.track.authors}`);
+
+const audioUrl = "https://cdn.bitmovin.com/content/assets/art-of-motion-dash-hls-progressive/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa-audio-only.m3u8";
+const playerRef = ref<InstanceType<typeof AudiostreamPlayer> | null>(null);
+
+// Состояние трека через глобальный плеер
+const isPlaying = globalPlayer.isTrackPlaying(trackId.value);
+const isCurrent = globalPlayer.isTrackCurrent(trackId.value);
+
+// Обработчик клика на трек
+const handleTrackClick = () => {
+  if (isPlaying.value) {
+    // Если трек играет - ставим на паузу
+    globalPlayer.pauseCurrentTrack();
+  } else if (isCurrent.value) {
+    // Если трек текущий но на паузе - возобновляем
+    globalPlayer.resumeCurrentTrack();
+  } else {
+    // Если трек не текущий - запускаем новый
+    globalPlayer.playTrack(trackId.value, props.track, playerRef.value);
+  }
+};
+
+// Обработчики событий плеера
+const onPlay = () => {
+  // Событие play обрабатывается глобальным плеером
+};
+
+const onPause = () => {
+  // Событие pause обрабатывается глобальным плеером
+};
+
+const onTimeUpdate = (currentTime: number, duration: number) => {
+  if (isCurrent.value) {
+    globalPlayer.updateTime(currentTime, duration);
+  }
+};
+
+const onEnded = () => {
+  if (isCurrent.value) {
+    globalPlayer.onTrackEnded();
+  }
+};
+
+const onError = (error: string) => {
+  if (isCurrent.value) {
+    globalPlayer.onTrackError(error);
+  }
+};
 </script>
 
 <style></style>
