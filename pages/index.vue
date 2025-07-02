@@ -9,7 +9,8 @@ const miniApp = useMiniApp();
   <div
     class="w-full flex flex-wrap justify-center items-center content-center gap-3 text-white h-full"
   >
-    <div class="w-full font-medium text-center pt-10 text-2xl">
+    <LucideAudioLines :size="50" class="hover:animate-pulse" />
+    <div class="w-full font-medium text-center pt-5 text-2xl">
       Привет{{
         miniApp.initDataUnsafe.user?.first_name
           ? `, ${miniApp.initDataUnsafe.user?.first_name}`
