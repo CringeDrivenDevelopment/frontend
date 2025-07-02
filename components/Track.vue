@@ -34,11 +34,7 @@
             v-if="isPlaying"
           />
         </div>
-        <img
-          :src="track.thumbnail"
-          alt="Обложка"
-          class="rounded-lg w-full h-full absolute top-0 z-0 select-none"
-        />
+        <FallbackImage :src="track.thumbnail" default-src="/images/default-track.png" class="rounded-lg w-full h-full absolute top-0 z-0 select-none" />
       </div>
       <div class="flex flex-col justify-between flex-1 min-w-0 overflow-hidden">
         <div class="w-full overflow-hidden">
