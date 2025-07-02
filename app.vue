@@ -8,7 +8,6 @@
     </div>
   </div>
 </template>
-<<<<<<< HEAD
 
 <script setup lang="ts">
 const { initSession } = await useAuth()
@@ -16,5 +15,3 @@ onMounted(() => {
   initSession()
 })
 </script>
-=======
->>>>>>> 9fe4e12eeb2cc677e45c7ec1d1fa08096482622a
