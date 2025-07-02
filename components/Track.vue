@@ -24,9 +24,10 @@
       </div>
     </div>
     <div class="flex gap-3 items-center">
-      <LucideX :size="27" class="hover:text-indigo-400 transition-colors duration-200" v-if="!moderation" />
-      <LucideCircleCheck :size="27" class="hover:text-indigo-400 transition-colors duration-200" v-if="moderation" />
-      <LucideBan :size="27" class="hover:text-indigo-400 transition-colors duration-200" v-if="moderation" />
+      <LucideX :size="27" class="hover:text-red-400 transition-colors duration-200" v-if="mode == 'accepted'" />
+      <LucideCircleCheck :size="27" class="hover:text-green-400 transition-colors duration-200" v-if="mode == 'moderation'" />
+      <LucideBan :size="27" class="hover:text-red-400 transition-colors duration-200" v-if="mode == 'moderation'" />
+      <LucidePlus :size="27" class="hover:text-indigo-400 transition-colors duration-200" v-if="mode == 'suggest'" />
     </div>
   </div>
 </template>
@@ -36,7 +37,7 @@ import type { components } from '#open-fetch-schemas/api';
 
 defineProps<{
   track: components['schemas']['Track'],
-  moderation: boolean,
+  mode: 'moderation' | 'accepted' | 'suggest',
 }>()
 
 const playing = ref(false);
