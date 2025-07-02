@@ -29,7 +29,7 @@ const miniApp = useMiniApp();
         <span>Добавить трек в плейлист</span>
       </NuxtLink>
       <NuxtLink
-        to="/playlist"
+        to="/playlists"
         class="w-full rounded-xl bg-indigo-500 p-4 hover:shadow-indigo-500 hover:shadow-2xl transition-shadow text-center text-lg flex items-center gap-4"
       >
         <LucideDisc3 :size="20" />
