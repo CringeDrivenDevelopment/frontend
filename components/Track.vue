@@ -5,9 +5,7 @@
     @click="playing = !playing"
   >
     <div class="flex items-center gap-3">
-      <div
-        class="rounded-lg size-13 aspect-square relative"
-      >
+      <div class="rounded-lg size-13 aspect-square relative">
         <div
           class="w-full h-full rounded-lg absolute top-0 z-20 flex justify-center items-center group hover:bg-indigo-500/40 transition-colors"
           :class="playing ? 'bg-indigo-500/40' : ''"
@@ -44,7 +42,11 @@
             </UiTooltip>
           </UiTooltipProvider>
         </div>
-        <span class="w-full text-md text-neutral-400">{{ formatSeconds(track.length) + ' - ' + (track.authors === "" ? "Неизвестен" : track.authors) }}</span>
+        <span class="w-full text-md text-neutral-400">{{
+          formatSeconds(track.length) +
+          " - " +
+          (track.authors === "" ? "Неизвестен" : track.authors)
+        }}</span>
       </div>
     </div>
     <div class="flex gap-3 items-center">
@@ -78,7 +80,7 @@
 
 <script lang="ts" setup>
 import type { components } from "#open-fetch-schemas/api";
-import { formatSeconds } from '~/lib/utils';
+import { formatSeconds } from "~/lib/utils";
 
 defineProps<{
   track: components["schemas"]["Track"];
@@ -86,6 +88,9 @@ defineProps<{
 }>();
 
 const playing = ref(false);
+
+// TODO:
+// никита надо сделать короче чтобы когда ставилось на паузу, то выделение с трека и обложки не пропадало, а кнопка play оставалась (ну типо чтобы запустить снова можно было), когда будешь делать проигрывание треков - реализуй и это
 </script>
 
 <style></style>
