@@ -4,7 +4,7 @@
     :class="playing ? 'bg-indigo-300/10' : ''"
     @click="playing = !playing"
   >
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3 flex-1 min-w-0">
       <div class="rounded-lg size-13 aspect-square relative">
         <div
           class="w-full h-full rounded-lg absolute top-0 z-20 flex justify-center items-center group hover:bg-indigo-500/40 transition-colors"
@@ -27,16 +27,15 @@
           class="rounded-lg w-full h-full absolute top-0 z-0 select-none"
         />
       </div>
-      <div class="flex flex-wrap content-between">
-        <div class="w-full flex gap-2 items-center">
-          <span
-            class="text-lg font-medium whitespace-nowrap truncate max-w-35"
-            >{{ track.title ?? "Без названия" }}</span
-          >
+      <div class="flex flex-col justify-between flex-1 min-w-0 overflow-hidden">
+        <div class="w-full flex gap-2 items-center overflow-hidden">
+          <span class="text-lg font-medium whitespace-nowrap truncate flex-1 min-w-0">
+            {{ track.title ?? "Без названия" }}
+          </span>
           <UiTooltipProvider>
             <UiTooltip>
               <UiTooltipTrigger>
-                <LucideCircleAlert :size="15" v-if="track.explicit" />
+                <LucideCircleAlert :size="15" v-if="track.explicit" class="shrink-0" />
               </UiTooltipTrigger>
               <UiTooltipContent>Нецензурная лексика</UiTooltipContent>
             </UiTooltip>
