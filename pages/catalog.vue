@@ -16,20 +16,14 @@
 
 <script lang="ts" setup>
 const query = ref("");
-const { data: tracks, status } = typeof query === 'string' ? useApi("/api/tracks", {
+const { data: tracks, status } = useApi("/api/tracks", {
   query: {
     query: query,
   },
   headers: {
     Authorization: `Bearer ${useAuth().token.value}`,
   },
-}) : {data: [], status: 'idle'};
-
-// watch(query, (newQuery) => {
-//   clearTimeout(timeout);
-//   timeout = setTimeout(() => {
-//   }, 600);
-// });
+});
 </script>
 
 <style></style>

@@ -1,13 +1,13 @@
 <template>
   <div class="h-16 bg-slate-800 text-white flex items-center justify-center">
     <nav class="w-full flex items-center justify-around h-full">
-      <NuxtLink to="/playlist" class="w-1/3 flex justify-center items-center transition-colors duration-200 hover:bg-slate-200/10 h-full" :class="{'bg-slate-200/10': route.name === 'playlist'}">
+      <NuxtLink to="/playlist" class="w-1/3 flex justify-center items-center h-full">
         <LucideListCheck class="size-8" :class="{'text-indigo-300': route.name === 'playlist'}" />
       </NuxtLink>
-      <NuxtLink to="/" class="w-1/3 flex justify-center items-center transition-colors duration-200 hover:bg-slate-200/10 h-full" :class="{'bg-slate-200/10': route.name === 'index'}">
+      <NuxtLink to="/" class="w-1/3 flex justify-center items-center h-full">
         <LucideHome class="size-10" :class="{'text-indigo-300': route.name === 'index'}" />
       </NuxtLink>
-      <NuxtLink to="/catalog" class="w-1/3 flex justify-center items-center transition-colors duration-200 hover:bg-slate-200/10 h-full" :class="{'bg-slate-200/10': route.name === 'catalog'}">
+      <NuxtLink to="/catalog" class="w-1/3 flex justify-center items-center h-full">
         <LucideListMusic class="size-8" :class="{'text-indigo-300': route.name === 'catalog'}" />
       </NuxtLink>
     </nav>
