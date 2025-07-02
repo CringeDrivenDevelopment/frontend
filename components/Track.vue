@@ -33,7 +33,7 @@
         <div class="w-full flex gap-2 items-center">
           <span
             class="text-lg font-medium whitespace-nowrap truncate max-w-35"
-            >{{ track.title }}</span
+            >{{ track.title ?? "Без названия" }}</span
           >
           <UiTooltipProvider>
             <UiTooltip>
@@ -44,7 +44,7 @@
             </UiTooltip>
           </UiTooltipProvider>
         </div>
-        <span class="w-full text-md text-neutral-400">{{ track.authors }}</span>
+        <span class="w-full text-md text-neutral-400">{{ track.authors === "" ? "Неизвестен" : track.authors }}</span>
       </div>
     </div>
     <div class="flex gap-3 items-center">
@@ -58,16 +58,19 @@
         :size="27"
         class="hover:text-green-400 transition-colors duration-200"
         v-if="mode == 'moderation'"
+        @click.stop=""
       />
       <LucideBan
         :size="27"
         class="hover:text-red-400 transition-colors duration-200"
         v-if="mode == 'moderation'"
+        @click.stop=""
       />
       <LucidePlus
         :size="27"
         class="hover:text-indigo-400 transition-colors duration-200"
         v-if="mode == 'suggest'"
+        @click.stop=""
       />
     </div>
   </div>
