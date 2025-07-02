@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex justify-between items-center rounded-lg cursor-pointer transition-colors hover:bg-indigo-300/10 p-2 group">
+  <div class="w-full flex justify-between items-center rounded-lg cursor-pointer transition-colors hover:bg-indigo-300/10 p-2 group text-white">
     <div class="flex items-center gap-3">
       <div class="rounded-lg size-13 aspect-square relative" @click="playing = !playing">
         <div class="w-full h-full rounded-lg bg-indigo-500/40 absolute top-0 z-20 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity">
