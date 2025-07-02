@@ -29,7 +29,7 @@
       </div>
       <div class="flex flex-col justify-between flex-1 min-w-0 overflow-hidden">
         <div class="w-full overflow-hidden">
-          <div class="inline-flex items-center gap-1 max-w-full truncate">
+          <div class="inline-flex items-center gap-1 max-w-10/12 truncate">
             <span class="text-lg font-medium whitespace-nowrap truncate">
               {{ track.title ?? "Без названия" }}
             </span>

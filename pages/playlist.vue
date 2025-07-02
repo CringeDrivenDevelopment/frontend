@@ -1,11 +1,11 @@
 <template>
   <div class="flex justify-center flex-wrap w-full text-white gap-3 py-3">
     <div class="w-full font-medium text-2xl">В плейлисте</div>
-    <div class="flex flex-wrap gap-2">
+    <div class="w-full flex flex-wrap gap-3">
       <Track v-for="track in tracks" :key="track.id" :track="track" mode="accepted" />
     </div>
     <div class="w-full font-medium text-2xl">На модерации</div>
-    <div class="flex flex-wrap gap-2">
+    <div class="w-full flex flex-wrap gap-3">
       <Track v-for="track in tracks" :key="track.id" :track="track" mode="moderation" />
     </div>
   </div>
