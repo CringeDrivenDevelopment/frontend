@@ -28,18 +28,20 @@
         />
       </div>
       <div class="flex flex-col justify-between flex-1 min-w-0 overflow-hidden">
-        <div class="w-full flex gap-2 items-center overflow-hidden">
-          <span class="text-lg font-medium whitespace-nowrap truncate flex-1 min-w-0">
-            {{ track.title ?? "Без названия" }}
-          </span>
-          <UiTooltipProvider>
-            <UiTooltip>
-              <UiTooltipTrigger>
-                <LucideCircleAlert :size="15" v-if="track.explicit" class="shrink-0" />
-              </UiTooltipTrigger>
-              <UiTooltipContent>Нецензурная лексика</UiTooltipContent>
-            </UiTooltip>
-          </UiTooltipProvider>
+        <div class="w-full overflow-hidden">
+          <div class="inline-flex items-center gap-1 max-w-full truncate">
+            <span class="text-lg font-medium whitespace-nowrap truncate">
+              {{ track.title ?? "Без названия" }}
+            </span>
+            <UiTooltipProvider v-if="track.explicit">
+              <UiTooltip>
+                <UiTooltipTrigger>
+                  <LucideCircleAlert :size="15" class="shrink-0" />
+                </UiTooltipTrigger>
+                <UiTooltipContent>Нецензурная лексика</UiTooltipContent>
+              </UiTooltip>
+            </UiTooltipProvider>
+          </div>
         </div>
         <span class="w-full text-md text-neutral-400">{{
           formatSeconds(track.length) +
