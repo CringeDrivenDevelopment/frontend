@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatSeconds(seconds: number) {
-  return Math.floor(seconds / 60) + ':' + (seconds - Math.floor(seconds / 60) * 60)
+  return Math.floor(seconds / 60) + ':' + String((seconds - Math.floor(seconds / 60) * 60)).padStart(2, "0")
 }
