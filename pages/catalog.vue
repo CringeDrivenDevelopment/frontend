@@ -7,6 +7,7 @@
         :key="track.id"
         :track="track"
         mode="suggest"
+        v-if="query !== ''"
       />
       <div class="text-xl w-full text-center text-white" v-if="query === ''">Введите что-то чтобы начать поиск...</div>
       <div class="text-xl w-full text-center text-white" v-else-if="tracks?.length === 0">Нет результатов :(</div>

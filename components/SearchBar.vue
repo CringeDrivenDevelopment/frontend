@@ -6,23 +6,32 @@ function clearSearch() {
   inputText.value = "";
 }
 
-let timeout: NodeJS.Timeout;
+let timeout: ReturnType<typeof setTimeout> | null = null;
+
+function updateModel(newQuery: string) {
+  model.value = newQuery;
+}
+
+function handleKeydown(evt: KeyboardEvent) {
+  if (evt.key === "Enter") {
+    if (timeout) clearTimeout(timeout);
+    updateModel(inputText.value.length >= 3 ? inputText.value : '');
+  }
+}
+
+onMounted(() => {
+  window.addEventListener("keydown", handleKeydown);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleKeydown);
+});
 
 watch(inputText, (newQuery) => {
-  clearTimeout(timeout);
+  if (timeout) clearTimeout(timeout);
   timeout = setTimeout(() => {
-    model.value = newQuery;
-  }, 2000);
-  const handleKeydown = (evt: KeyboardEvent) => {
-    if (evt.key === "Enter") {
-      clearTimeout(timeout);
-      model.value = newQuery;
-    }
-  };
-  window.addEventListener("keydown", handleKeydown);
-  return () => {
-    window.removeEventListener("keydown", handleKeydown);
-  }
+    updateModel(newQuery.length >= 3 ? newQuery : '');
+  }, 400);
 });
 
 defineEmits<{
