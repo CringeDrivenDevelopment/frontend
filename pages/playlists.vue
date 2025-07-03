@@ -16,6 +16,12 @@
       >
         У вас пока нет плейлистов. Создайте свой первый плейлист!
       </div>
+      <div
+        v-else-if="(status as 'idle' | 'success' | 'error' | 'pending') === 'pending'"
+        class="w-full text-center text-gray-500"
+      >
+        Загрузка...
+      </div>
     </div>
   </div>
   <UiPopover :open="createOpened">

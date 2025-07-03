@@ -16,8 +16,8 @@
           </span>
         </div>
         <span class="text-regular text-md text-neutral-400">
-          {{ playlist.length }}
-          {{ getNoun(playlist.length, "трек", "трека", "треков") }}
+          {{ playlist.count }}
+          {{ getNoun(playlist.count, "трек", "трека", "треков") }}
         </span>
       </div>
     </NuxtLink>

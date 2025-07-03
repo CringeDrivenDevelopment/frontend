@@ -39,6 +39,6 @@ export default defineNuxtConfig({
         { src: "https://telegram.org/js/telegram-web-app.js", defer: true },
       ],
     },
-    // pageTransition: { name: "page", mode: "in-out" }
+    // pageTransition: { name: "page", mode: "out-in" }
   },
 });

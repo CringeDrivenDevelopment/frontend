@@ -22,11 +22,11 @@ const props = defineProps<{
 }>();
 
 const selected = ref(
-  props.playlist.tracks?.map((track) => track.id).includes(props.track.id) ?? false
+  props.track.playlist_ids?.includes(props.playlist.id) ?? false
 );
 
 function toggleTrack() {
-  // if (!selected) {
+  if (!selected.value) {
     useApi("/api/playlists/{id}/submit", {
       method: "POST",
       headers: {
@@ -39,9 +39,9 @@ function toggleTrack() {
         track_id: props.track.id,
       },
     });
-  //   (selected as globalThis.Ref).value = true;
-  // } else {
+    (selected as globalThis.Ref).value = true;
+  } else {
     // delete track
-  // }
+  }
 }
 </script>
