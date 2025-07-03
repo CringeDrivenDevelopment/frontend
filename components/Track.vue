@@ -1,7 +1,7 @@
 <template>
   <div
-    class="w-full flex justify-between items-center rounded-lg cursor-pointer transition-colors hover:bg-indigo-300/10 p-2 text-white"
-    :class="isCurrent ? 'bg-indigo-300/10' : ''"
+    class="w-full flex justify-between items-center rounded-lg cursor-pointer transition-colors hover:bg-slate-300/15 p-2 text-white"
+    :class="isCurrent ? 'bg-slate-300/15' : ''"
     @click="handleTrackClick"
   >
     <AudiostreamPlayer
@@ -90,12 +90,12 @@
         <UiPopoverTrigger @click.stop="">
           <LucidePlus
             :size="27"
-            class="hover:text-indigo-400 transition-all duration-200"
+            class="hover:text-indigo-400 transition-all duration-200 cursor-pointer"
             :class="{'rotate-45': selectOpened}"
           />
         </UiPopoverTrigger>
         <UiPopoverContent
-          class="rounded-xl border-none bg-slate-700 text-white"
+          class="rounded-xl border-none bg-slate-800 text-white"
         >
           <div class="w-full flex flex-wrap gap-2">
             <span class="w-full text-lg">Добавить в плейлист:</span>
@@ -104,6 +104,7 @@
                 v-for="playlist in playlists"
                 :key="playlist.id"
                 :playlist="playlist"
+                :track="track"
               />
             </UiScrollArea>
           </div>

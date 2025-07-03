@@ -1,6 +1,14 @@
 <template>
-  <div class="w-full p-2 flex flex-wrap items-center gap-2 rounded-lg" :class="{'bg-slate-500/20': selected}" @click="selected = !selected">
-    <LucidePlus :size="20" class="cursor-pointer transition-transform" :class="{'rotate-45': selected}" />
+  <div
+    class="w-full p-2 flex flex-wrap items-center gap-2 rounded-lg cursor-pointer hover:bg-slate-500/15 transition-colors"
+    :class="{ 'bg-slate-300/15': selected }"
+    @click="toggleTrack"
+  >
+    <LucidePlus
+      :size="20"
+      class="cursor-pointer transition-transform"
+      :class="{ 'rotate-45': selected }"
+    />
     <span class="select-none">{{ playlist.title }}</span>
   </div>
 </template>
@@ -8,11 +16,32 @@
 <script lang="ts" setup>
 import type { components } from "#open-fetch-schemas/api";
 
-defineProps<{
+const props = defineProps<{
+  track: components["schemas"]["Track"];
   playlist: components["schemas"]["Playlist"];
 }>();
 
-const selected = ref(false);
-</script>
+const selected = ref(
+  props.playlist.tracks?.map((track) => track.id).includes(props.track.id) ?? false
+);
 
-<style></style>
+function toggleTrack() {
+  // if (!selected) {
+    useApi("/api/playlists/{id}/submit", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${useAuth().token.value}`,
+      },
+      path: {
+        id: props.playlist.id,
+      },
+      body: {
+        track_id: props.track.id,
+      },
+    });
+  //   (selected as globalThis.Ref).value = true;
+  // } else {
+    // delete track
+  // }
+}
+</script>

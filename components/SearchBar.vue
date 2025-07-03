@@ -57,7 +57,7 @@ defineProps<{
     />
     <UiInput
       v-model="inputText"
-      class="bg-transparent"
+      class="bg-transparent placeholder:text-neutral-300"
       placeholder="Поиск треков"
       :noFocusRing="true"
     />

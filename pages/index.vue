@@ -12,7 +12,7 @@ const clicks = ref(0);
     :class="`w-full flex flex-wrap justify-center items-center content-center gap-3 text-white h-full ${clicks > 4 ? 'yantoples' : ''}`"
   >
     <LucideAudioLines :size="50" class="hover:animate-pulse cursor-pointer select-none" @click="clicks++" />
-    <div class="w-full font-medium text-center pt-5 text-2xl">
+    <div class="w-full font-medium text-center pt-5 text-2xl truncate">
       Привет{{
         miniApp.initDataUnsafe.user?.first_name
           ? `, ${miniApp.initDataUnsafe.user?.first_name}`
