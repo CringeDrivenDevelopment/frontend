@@ -3,13 +3,15 @@ import { NuxtLink } from "#components";
 import { useMiniApp } from "vue-tg";
 
 const miniApp = useMiniApp();
+
+const clicks = ref(0);
 </script>
 
 <template>
   <div
-    class="w-full flex flex-wrap justify-center items-center content-center gap-3 text-white h-full"
+    :class="`w-full flex flex-wrap justify-center items-center content-center gap-3 text-white h-full ${clicks > 4 ? 'yantoples' : ''}`"
   >
-    <LucideAudioLines :size="50" class="hover:animate-pulse" />
+    <LucideAudioLines :size="50" class="hover:animate-pulse cursor-pointer select-none" @click="clicks++" />
     <div class="w-full font-medium text-center pt-5 text-2xl">
       Привет{{
         miniApp.initDataUnsafe.user?.first_name
@@ -38,3 +40,11 @@ const miniApp = useMiniApp();
     </div>
   </div>
 </template>
+
+<style>
+.yantoples {
+  background-image: linear-gradient(rgba(23, 33, 43, .7), rgba(23, 33, 43, .7)), url('/images/yantoples.png');
+  background-size: cover;
+  background-position: center center;
+}
+</style>

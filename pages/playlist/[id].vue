@@ -15,6 +15,7 @@
         :key="track.id"
         :track="track"
         mode="accepted"
+        :playlists="[]"
       />
     </div>
     <div class="w-full" v-if="acceptedTracks.length === 0">
@@ -27,6 +28,7 @@
         :key="track.id"
         :track="track"
         mode="moderation"
+        :playlists="[]"
       />
       <div class="w-full" v-if="moderatedTracks.length === 0">
         Тут треков нет :(

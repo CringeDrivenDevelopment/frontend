@@ -4,7 +4,7 @@
     :class="isCurrent ? 'bg-indigo-300/10' : ''"
     @click="handleTrackClick"
   >
-    <AudiostreamPlayer 
+    <AudiostreamPlayer
       ref="playerRef"
       :invisible="true"
       :src="audioUrl"
@@ -24,7 +24,11 @@
           <LucideCirclePlay
             :size="27"
             class="hover:text-indigo-100 transition-colors duration-200"
-            :class="isCurrent && !isPlaying ? 'opacity-100' : 'group-hover:opacity-100 opacity-0'"
+            :class="
+              isCurrent && !isPlaying
+                ? 'opacity-100'
+                : 'group-hover:opacity-100 opacity-0'
+            "
             v-if="!isPlaying"
           />
           <!-- Показываем pause только когда трек активно играет -->
@@ -34,7 +38,11 @@
             v-if="isPlaying"
           />
         </div>
-        <FallbackImage :src="track.thumbnail" default-src="/images/default-track.png" class="rounded-lg w-full h-full absolute top-0 z-0 select-none" />
+        <FallbackImage
+          :src="track.thumbnail"
+          default-src="/images/default-track.png"
+          class="rounded-lg w-full h-full absolute top-0 z-0 select-none"
+        />
       </div>
       <div class="flex flex-col justify-between flex-1 min-w-0 overflow-hidden">
         <div class="w-full overflow-hidden">
@@ -78,12 +86,28 @@
         v-if="mode == 'moderation'"
         @click.stop=""
       />
-      <LucidePlus
-        :size="27"
-        class="hover:text-indigo-400 transition-colors duration-200"
-        v-if="mode == 'suggest'"
-        @click.stop=""
-      />
+      <UiPopover v-if="mode == 'suggest'">
+        <UiPopoverTrigger @click.stop="">
+          <LucidePlus
+            :size="27"
+            class="hover:text-indigo-400 transition-colors duration-200"
+          />
+        </UiPopoverTrigger>
+        <UiPopoverContent
+          class="rounded-xl border-none bg-slate-700 text-white"
+        >
+          <div class="w-full flex flex-wrap gap-2">
+            <span class="w-full text-lg">Добавить в плейлист:</span>
+            <UiScrollArea class="max-h-[200px] w-full flex flex-wrap gap-2">
+              <PlaylistRow
+                v-for="playlist in playlists"
+                :key="playlist.id"
+                :playlist="playlist"
+              />
+            </UiScrollArea>
+          </div>
+        </UiPopoverContent>
+      </UiPopover>
     </div>
   </div>
 </template>
@@ -96,13 +120,16 @@ import { useGlobalPlayer } from "~/composables/useGlobalPlayer";
 
 const props = defineProps<{
   track: components["schemas"]["Track"];
+  playlists: components["schemas"]["Playlist"][];
   mode: "moderation" | "accepted" | "suggest";
 }>();
 
 const globalPlayer = useGlobalPlayer();
 
 // Создаем уникальный ID для трека (можно использовать track.id если есть)
-const trackId = computed(() => `track-${props.track.title}-${props.track.authors}-${props.track.id}`);
+const trackId = computed(
+  () => `track-${props.track.title}-${props.track.authors}-${props.track.id}`
+);
 
 const audioUrl = "/audio/output.m3u8";
 const playerRef = ref<InstanceType<typeof AudiostreamPlayer> | null>(null);

@@ -7,6 +7,7 @@
         :key="track.id"
         :track="track"
         mode="suggest"
+        :playlists="playlists ?? []"
         v-if="query !== ''"
       />
       <div class="text-xl w-full text-center text-white mt-5" v-if="query === ''">Введите что-то чтобы начать поиск...</div>
@@ -17,6 +18,11 @@
 
 <script lang="ts" setup>
 const query = ref("");
+const { data: playlists } = useApi("/api/playlists", {
+  headers: {
+    Authorization: `Bearer ${useAuth().token.value}`,
+  },
+});
 const { data: tracks, status } = useApi("/api/tracks", {
   query: {
     query: query,
