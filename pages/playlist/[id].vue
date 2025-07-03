@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center flex-wrap w-full text-white gap-2" :key="playlist?.id">
+  <div class="flex justify-center flex-wrap w-full text-white gap-2" :key="playlist?.id" v-if="status === 'success'">
     <div class="w-full font-medium py-1 flex items-center gap-3">
       <NuxtLink to="/playlists">
         <LucideChevronLeft :size="30" />
@@ -40,7 +40,7 @@
 <script lang="ts" setup>
 const route = useRoute();
 
-const { data: playlist } = useApi("/api/playlists/{id}", {
+const { data: playlist, status } = useApi("/api/playlists/{id}", {
   path: {
     id: route.params.id.toString(),
   },
@@ -62,5 +62,3 @@ const moderatedTracks = computed(
     ) ?? []
 );
 </script>
-
-<style></style>

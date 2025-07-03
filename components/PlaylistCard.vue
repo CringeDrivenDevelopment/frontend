@@ -3,7 +3,7 @@
     class="w-full flex justify-between gap-5 items-center rounded-lg cursor-pointer transition-all bg-slate-800 hover:bg-slate-800/80 p-2 text-white pr-5"
     :class="{'opacity-0': isDeleted}"
   >
-    <NuxtLink class="flex gap-5 max-w-2/3" :to="`/playlist/${playlist.id}`" :external="true">
+    <NuxtLink class="flex gap-5 max-w-2/3" :to="`/playlist/${playlist.id}`">
       <FallbackImage
         :src="playlist.thumbnail"
         default-src="/images/default-playlist.png"

@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex justify-center flex-row flex-wrap">
-    <div class="w-11/12 pb-20 p-2">
-      <NuxtPage />
+    <div class="w-11/12 pb-20 p-2 relative">
+      <NuxtPage :key="$route.fullPath" />
     </div>
     <div class="w-full fixed bottom-0 z-50">
       <FooterNavBar />
@@ -12,7 +12,7 @@
 <style>
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.1s;
+  transition: all 1s;
 }
 .page-enter-from,
 .page-leave-to {

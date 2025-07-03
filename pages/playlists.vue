@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap gap-3">
+  <div class="flex flex-wrap items-start gap-3" v-if="status !== 'pending'">
     <div class="w-full text-2xl text-white font-medium py-1">
       Ваши плейлисты
     </div>
@@ -11,7 +11,7 @@
         :refresh="refresh"
       />
       <div
-        v-if="!playlists || playlists.length === 0"
+        v-if="(!playlists || playlists.length === 0) && (status as 'idle' | 'success' | 'error' | 'pending') !== 'pending'"
         class="w-full text-center text-gray-500"
       >
         У вас пока нет плейлистов. Создайте свой первый плейлист!
@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-const { data: playlists, refresh } = useApi("/api/playlists", {
+const { data: playlists, refresh, status } = useApi("/api/playlists", {
   headers: {
     Authorization: `Bearer ${useAuth().token.value}`,
   },
