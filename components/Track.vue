@@ -102,9 +102,9 @@ const props = defineProps<{
 const globalPlayer = useGlobalPlayer();
 
 // Создаем уникальный ID для трека (можно использовать track.id если есть)
-const trackId = computed(() => `track-${props.track.title}-${props.track.authors}`);
+const trackId = computed(() => `track-${props.track.title}-${props.track.authors}-${props.track.id}`);
 
-const audioUrl = "https://cdn.bitmovin.com/content/assets/art-of-motion-dash-hls-progressive/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa-audio-only.m3u8";
+const audioUrl = "/audio/output.m3u8";
 const playerRef = ref<InstanceType<typeof AudiostreamPlayer> | null>(null);
 
 // Состояние трека через глобальный плеер
