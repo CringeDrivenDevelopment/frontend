@@ -10,8 +10,15 @@
         :playlists="playlists ?? []"
         v-if="query !== ''"
       />
-      <div class="text-xl w-full text-center text-white mt-5" v-if="query === ''">Введите что-то чтобы начать поиск...</div>
-      <div class="text-xl w-full text-center text-white mt-5" v-else-if="tracks?.length === 0">Нет результатов :(</div>
+      <div v-if="query === ''" class="w-full text-center text-gray-500">
+        Введите что-то чтобы начать поиск...
+      </div>
+      <div
+        v-else-if="tracks?.length === 0"
+        class="w-full text-center text-gray-500"
+      >
+        Нет результатов :(
+      </div>
     </div>
   </div>
 </template>

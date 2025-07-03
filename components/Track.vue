@@ -86,11 +86,12 @@
         v-if="mode == 'moderation'"
         @click.stop=""
       />
-      <UiPopover v-if="mode == 'suggest'">
+      <UiPopover v-if="mode == 'suggest'" @update:open="(opened) => selectOpened = opened">
         <UiPopoverTrigger @click.stop="">
           <LucidePlus
             :size="27"
-            class="hover:text-indigo-400 transition-colors duration-200"
+            class="hover:text-indigo-400 transition-all duration-200"
+            :class="{'rotate-45': selectOpened}"
           />
         </UiPopoverTrigger>
         <UiPopoverContent
@@ -117,6 +118,8 @@ import type { AudiostreamPlayer } from "#components";
 import type { components } from "#open-fetch-schemas/api";
 import { formatSeconds } from "~/lib/utils";
 import { useGlobalPlayer } from "~/composables/useGlobalPlayer";
+
+const selectOpened = ref(false);
 
 const props = defineProps<{
   track: components["schemas"]["Track"];
