@@ -33,7 +33,7 @@ const { data: playlists } = useApi("/api/playlists", {
   },
 });
 
-const { data: tracks, status, refresh } = useApi("/api/tracks", {
+const { data: tracks, status, refresh } = useApi("/api/youtube/search", {
   query: {
     query: query,
   },

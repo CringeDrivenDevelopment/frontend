@@ -28,24 +28,35 @@ const selected = ref(
 
 function toggleTrack() {
   if (!selected.value) {
-    useApi("/api/playlists/{id}/submit", {
+    useApi("/api/playlists/{playlist_id}/{track_id}/submit", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${useAuth().token.value}`,
       },
       path: {
-        id: props.playlist.id,
-      },
-      body: {
+        playlist_id: props.playlist.id,
         track_id: props.track.id,
       },
     });
     if (props.refreshTracks) {
       props.refreshTracks();
-    } 
+    }
     (selected as globalThis.Ref).value = true;
   } else {
-    // delete track
+    useApi("/api/playlists/{playlist_id}/{track_id}/remove", {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${useAuth().token.value}`,
+      },
+      path: {
+        playlist_id: props.playlist.id,
+        track_id: props.track.id,
+      },
+    });
+    if (props.refreshTracks) {
+      props.refreshTracks();
+    }
+    (selected as globalThis.Ref).value = false;
   }
 }
 </script>

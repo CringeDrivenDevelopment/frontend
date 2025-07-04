@@ -47,7 +47,7 @@
       <div class="flex flex-col justify-between flex-1 min-w-0 overflow-hidden">
         <div class="w-full overflow-hidden">
           <div class="inline-flex items-center gap-1 max-w-full pr-3 truncate">
-            <span class="text-lg font-medium whitespace-nowrap truncate">
+            <span class="text-lg font-medium truncate">
               {{ track.title ?? "Без названия" }}
             </span>
             <UiTooltipProvider v-if="track.explicit">
@@ -60,7 +60,7 @@
             </UiTooltipProvider>
           </div>
         </div>
-        <span class="w-full text-md text-neutral-400">{{
+        <span class="w-full text-md text-neutral-400 truncate">{{
           formatSeconds(track.length) +
           " - " +
           (track.authors === "" ? "Неизвестен" : track.authors)
@@ -72,26 +72,26 @@
         :size="27"
         class="hover:text-red-400 transition-colors duration-200"
         v-if="mode == 'accepted'"
-        @click.stop=""
+        @click.stop="deleteTrackHandler"
       />
       <LucideCircleCheck
         :size="27"
         class="hover:text-green-400 transition-colors duration-200"
         v-if="mode == 'moderation'"
-        @click.stop=""
+        @click.stop="approveTrackHandler"
       />
       <LucideBan
         :size="27"
         class="hover:text-red-400 transition-colors duration-200"
         v-if="mode == 'moderation'"
-        @click.stop=""
+        @click.stop="declineTrackHandler"
       />
       <UiPopover v-if="mode == 'suggest'" @update:open="handleOpen">
         <UiPopoverTrigger @click.stop="">
           <LucidePlus
             :size="27"
             class="hover:text-indigo-400 transition-all duration-200 cursor-pointer"
-            :class="{'rotate-45': selectOpened}"
+            :class="{ 'rotate-45': selectOpened }"
           />
         </UiPopoverTrigger>
         <UiPopoverContent
@@ -128,6 +128,7 @@ const props = defineProps<{
   playlists: components["schemas"]["Playlist"][];
   mode: "moderation" | "accepted" | "suggest";
   refreshTracks?: Function;
+  currentPlaylistId?: string;
 }>();
 
 function handleOpen(opened: boolean) {
@@ -188,6 +189,64 @@ const onError = (error: string) => {
     globalPlayer.onTrackError(error);
   }
 };
+
+// handlers
+
+function approveTrackHandler() {
+  if (props.currentPlaylistId) {
+    useApi("/api/playlists/{playlist_id}/{track_id}/approve", {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${useAuth().token.value}`,
+      },
+      path: {
+        playlist_id: props.currentPlaylistId,
+        track_id: props.track.id,
+      },
+    });
+    if (props.refreshTracks) {
+      props.refreshTracks();
+    }
+  }
+}
+
+function declineTrackHandler() {
+  if (props.currentPlaylistId) {
+    useApi("/api/playlists/{playlist_id}/{track_id}/decline", {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${useAuth().token.value}`,
+      },
+      path: {
+        playlist_id: props.currentPlaylistId,
+        track_id: props.track.id,
+      },
+    });
+    if (props.refreshTracks) {
+      props.refreshTracks();
+    }
+  }
+}
+
+function deleteTrackHandler() {
+  if (props.currentPlaylistId) {
+    useApi("/api/playlists/{playlist_id}/{track_id}/remove", {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${useAuth().token.value}`,
+      },
+      path: {
+        playlist_id: props.currentPlaylistId,
+        track_id: props.track.id,
+      },
+    });
+    setTimeout(() => {
+      if (props.refreshTracks) {
+        props.refreshTracks();
+      }
+    }, 500);
+  }
+}
 </script>
 
 <style></style>

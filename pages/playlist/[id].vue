@@ -14,8 +14,10 @@
         v-for="track in acceptedTracks"
         :key="track.id"
         :track="track"
-        mode="accepted"
         :playlists="[]"
+        :current-playlist-id="route.params.id.toString()"
+        :refresh-tracks="refresh"
+        mode="accepted"
       />
     </div>
     <div class="w-full" v-if="acceptedTracks.length === 0">
@@ -27,8 +29,10 @@
         v-for="track in moderatedTracks"
         :key="track.id"
         :track="track"
-        mode="moderation"
         :playlists="[]"
+        :current-playlist-id="route.params.id.toString()"
+        :refresh-tracks="refresh"
+        mode="moderation"
       />
       <div class="w-full" v-if="moderatedTracks.length === 0">
         Тут треков нет :(
@@ -40,7 +44,7 @@
 <script lang="ts" setup>
 const route = useRoute();
 
-const { data: playlist, status } = useApi("/api/playlists/{id}", {
+const { data: playlist, status, refresh } = useApi("/api/playlists/{id}", {
   path: {
     id: route.params.id.toString(),
   },
