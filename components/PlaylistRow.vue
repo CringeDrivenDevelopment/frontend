@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full p-2 flex flex-wrap items-center gap-2 rounded-lg cursor-pointer hover:bg-slate-500/15 transition-colors"
+    class="w-full p-2 flex flex-wrap items-center gap-2 rounded-lg cursor-pointer hover:bg-slate-500/15 transition-colors mb-2"
     :class="{ 'bg-slate-300/15': selected }"
     @click="toggleTrack"
   >
@@ -19,6 +19,7 @@ import type { components } from "#open-fetch-schemas/api";
 const props = defineProps<{
   track: components["schemas"]["Track"];
   playlist: components["schemas"]["Playlist"];
+  refreshTracks?: Function;
 }>();
 
 const selected = ref(
@@ -39,6 +40,9 @@ function toggleTrack() {
         track_id: props.track.id,
       },
     });
+    if (props.refreshTracks) {
+      props.refreshTracks();
+    } 
     (selected as globalThis.Ref).value = true;
   } else {
     // delete track

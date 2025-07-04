@@ -86,7 +86,7 @@
         v-if="mode == 'moderation'"
         @click.stop=""
       />
-      <UiPopover v-if="mode == 'suggest'" @update:open="(opened) => selectOpened = opened">
+      <UiPopover v-if="mode == 'suggest'" @update:open="handleOpen">
         <UiPopoverTrigger @click.stop="">
           <LucidePlus
             :size="27"
@@ -105,6 +105,7 @@
                 :key="playlist.id"
                 :playlist="playlist"
                 :track="track"
+                :refresh-tracks="refreshTracks"
               />
             </UiScrollArea>
           </div>
@@ -126,7 +127,12 @@ const props = defineProps<{
   track: components["schemas"]["Track"];
   playlists: components["schemas"]["Playlist"][];
   mode: "moderation" | "accepted" | "suggest";
+  refreshTracks?: Function;
 }>();
+
+function handleOpen(opened: boolean) {
+  selectOpened.value = opened;
+}
 
 const globalPlayer = useGlobalPlayer();
 
