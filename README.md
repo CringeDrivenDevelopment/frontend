@@ -1,75 +1,16 @@
-# Nuxt Minimal Starter
+# Muse Frontend
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Frontend TODO:
+- поддержка стримов с бэкенда пн-вт
+- кнопка "скачать плейлист" вт-ср
+- реализовать процесс скачивания плейлиста вт-ср
+- проверить работоспособность, посмотреть на вебапп с точки зрения разных ролей ср-чт
 
-## Setup
+## Запуск
+```shell
+# 1. Установка зависимостей
+pnpm i
 
-Make sure to install dependencies:
-
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
+# 2. Запуск в dev
 pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
