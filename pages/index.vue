@@ -28,7 +28,7 @@ const clicks = ref(0);
         class="w-full rounded-xl bg-indigo-500 p-4 hover:shadow-indigo-500 hover:shadow-2xl transition-shadow text-center text-lg flex items-center gap-4"
       >
         <LucideMusic :size="20" />
-        <span>Добавить трек в плейлист</span>
+        <span>Предложить трек</span>
       </NuxtLink>
       <NuxtLink
         to="/playlists"
