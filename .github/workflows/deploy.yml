@@ -11,8 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
-      deployments: write
+      contents: write
+      packages: write
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     concurrency:
       group: 'pages'
@@ -47,13 +53,24 @@ jobs:
       - name: Build and install deps
         run: pnpm install && pnpm generate
 
-      - name: Deploy
-        uses: cloudflare/wrangler-action@v3
+      # - name: Deploy
+      #   uses: cloudflare/wrangler-action@v3
+      #   with:
+      #     apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      #     accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      #     command: pages deploy dist --project-name=hse-frontend
+      #     gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=hse-frontend
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          path: './dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
       - name: Save packages to cache
         uses: actions/cache/save@v4
