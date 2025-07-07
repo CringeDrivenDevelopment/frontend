@@ -107,6 +107,12 @@
                 :track="track"
                 :refresh-tracks="refreshTracks"
               />
+              <div v-if="playlists.length === 0" class="w-full flex flex-wrap gap-2">
+                <span class="w-full text-gray-500">У вас нет плейлистов :(</span>
+                <NuxtLink to="/playlists?createFormOpened=true" class="w-full underline text-indigo-400 hover:text-indigo-500 transition-colors"
+                  >Создать</NuxtLink
+                >
+              </div>
             </UiScrollArea>
           </div>
         </UiPopoverContent>
@@ -248,5 +254,3 @@ function deleteTrackHandler() {
   }
 }
 </script>
-
-<style></style>

@@ -25,14 +25,14 @@ const clicks = ref(0);
     <div class="flex flex-wrap gap-4 w-11/12">
       <NuxtLink
         to="/catalog"
-        class="w-full rounded-xl bg-indigo-500 p-4 hover:shadow-indigo-500 hover:shadow-2xl transition-shadow text-center text-lg flex items-center gap-4"
+        class="w-full rounded-xl bg-indigo-500 p-4 hover:shadow-indigo-500 hover:shadow-2xl transition-shadow text-center text-lg flex items-center justify-center gap-3"
       >
         <LucideMusic :size="20" />
         <span>Предложить трек</span>
       </NuxtLink>
       <NuxtLink
         to="/playlists"
-        class="w-full rounded-xl bg-indigo-500 p-4 hover:shadow-indigo-500 hover:shadow-2xl transition-shadow text-center text-lg flex items-center gap-4"
+        class="w-full rounded-xl bg-indigo-500 p-4 hover:shadow-indigo-500 hover:shadow-2xl transition-shadow text-center text-lg flex items-center justify-center gap-3"
       >
         <LucideDisc3 :size="20" />
         <span>Посмотреть плейлисты</span>

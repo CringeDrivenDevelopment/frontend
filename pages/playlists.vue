@@ -24,11 +24,11 @@
       </div>
     </div>
   </div>
-  <UiPopover :open="createOpened">
+  <UiPopover :open="createFormOpened">
     <UiPopoverTrigger class="fixed z-10 bottom-6/12 mb-9 right-0 mr-42">
       <button
         class="p-4 bg-indigo-500 hover:bg-indigo-600 rounded-lg z-10 fixed bottom-1/12 mb-9 right-5 cursor-pointer transition-colors shadow-xl"
-        @click="createOpened = !createOpened"
+        @click="createFormOpened = !createFormOpened"
       >
         <LucidePlus :size="30" class="text-white" />
       </button>
@@ -53,13 +53,15 @@
 </template>
 
 <script lang="ts" setup>
+const route = useRoute();
+
 const { data: playlists, refresh, status } = useApi("/api/playlists", {
   headers: {
     Authorization: `Bearer ${useAuth().token.value}`,
   },
 });
 
-const createOpened = ref(false);
+const createFormOpened = ref(route.query.createFormOpened === "true");
 const playlistTitle = ref("");
 
 function createPlaylist() {
@@ -73,7 +75,7 @@ function createPlaylist() {
         title: playlistTitle.value,
       },
     }).then(() => {
-      createOpened.value = false;
+      createFormOpened.value = false;
       playlistTitle.value = "";
       refresh();
     });
