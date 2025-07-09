@@ -97,16 +97,6 @@ const downloadPlaylist = async () => {
     });
 
     if (data?.filename) {
-      // Fetch the file as a blob with Authorization header
-      const response = await fetch(`https://cloud.lxft.tech/api/youtube/${data.filename}`, {
-      headers: {
-        Authorization: `Bearer ${useAuth().token.value}`,
-      },
-      });
-      if (!response.ok) throw new Error('Download failed');
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      
       if (!downloadFile) {
         console.error('Download function is not available');
         return;
@@ -114,7 +104,7 @@ const downloadPlaylist = async () => {
 
       await downloadFile({
         file_name: 'playlist.zip',
-        url: url
+        url: `https://cloud.lxft.tech/api/youtube/${data.filename}`
       });
     }
   } finally {
