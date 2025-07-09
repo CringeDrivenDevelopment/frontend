@@ -7,6 +7,14 @@
       <span class="text-2xl mb-1 max-w-full truncate">
         {{ playlist?.title ?? "" }}
       </span>
+      <UiButton
+        class="rounded-lg py-2 px-5 cursor-pointer bg-indigo-500 hover:bg-indigo-600 transition-colors ml-auto"
+        @click="downloadPlaylist"
+        :disabled="downloadPending"
+      >
+        <span v-if="downloadPending">Скачивание...</span>
+        <span v-else>Скачать</span>
+      </UiButton>
     </div>
     <div class="w-full font-medium text-xl">В плейлисте</div>
     <div class="w-full flex flex-wrap gap-3">
@@ -65,4 +73,54 @@ const moderatedTracks = computed(
       (track) => !playlist.value?.allowed_ids?.includes(track.id)
     ) ?? []
 );
+
+const { $api } = useNuxtApp();
+
+const downloadPending = ref(false);
+
+const downloadPlaylist = async () => {
+  if (!playlist.value || downloadPending.value) return;
+  downloadPending.value = true;
+  try {
+    // Assume the API returns { url: "https://..." }
+    const data = await $api('/api/playlists/{id}/download', {
+      method: 'POST',
+      path: {
+        id: playlist.value.id
+      },
+      headers: {
+        Authorization: `Bearer ${useAuth().token.value}`,
+      }
+    });
+
+    if (data?.filename) {
+      // Fetch the file as a blob with Authorization header
+      const response = await fetch(`https://cloud.lxft.tech/api/youtube/${data.filename}`, {
+      headers: {
+        Authorization: `Bearer ${useAuth().token.value}`,
+      },
+      });
+      if (!response.ok) throw new Error('Download failed');
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+
+      const contentDisposition = response.headers.get('content-disposition');
+      let filename = 'playlist.zip';
+      if (contentDisposition) {
+      const match = contentDisposition.match(/filename="?([^"]+)"?/);
+      if (match) filename = match[1];
+      }
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }
+  } finally {
+    downloadPending.value = false;
+  }
+};
+
 </script>
