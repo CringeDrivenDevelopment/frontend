@@ -50,6 +50,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useMiniApp } from 'vue-tg';
+
 const route = useRoute();
 
 const { data: playlist, status, refresh } = useApi("/api/playlists/{id}", {
@@ -77,6 +79,7 @@ const moderatedTracks = computed(
 const { $api } = useNuxtApp();
 
 const downloadPending = ref(false);
+const { downloadFile } = useMiniApp();
 
 const downloadPlaylist = async () => {
   if (!playlist.value || downloadPending.value) return;
@@ -103,20 +106,16 @@ const downloadPlaylist = async () => {
       if (!response.ok) throw new Error('Download failed');
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-
-      const contentDisposition = response.headers.get('content-disposition');
-      let filename = 'playlist.zip';
-      if (contentDisposition) {
-      const match = contentDisposition.match(/filename="?([^"]+)"?/);
-      if (match) filename = match[1];
+      
+      if (!downloadFile) {
+        console.error('Download function is not available');
+        return;
       }
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+
+      await downloadFile({
+        file_name: 'playlist.zip',
+        url: url
+      });
     }
   } finally {
     downloadPending.value = false;
