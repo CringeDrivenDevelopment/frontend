@@ -26,9 +26,11 @@ const selected = ref(
   props.track.playlist_ids?.includes(props.playlist.id) ?? false
 );
 
-function toggleTrack() {
+const { $api } = useNuxtApp();
+
+async function toggleTrack() {
   if (!selected.value) {
-    useApi("/api/playlists/{playlist_id}/{track_id}/submit", {
+    await $api("/api/playlists/{playlist_id}/{track_id}/submit", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${useAuth().token.value}`,
@@ -43,7 +45,7 @@ function toggleTrack() {
     }
     (selected as globalThis.Ref).value = true;
   } else {
-    useApi("/api/playlists/{playlist_id}/{track_id}/remove", {
+    await $api("/api/playlists/{playlist_id}/{track_id}/remove", {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${useAuth().token.value}`,

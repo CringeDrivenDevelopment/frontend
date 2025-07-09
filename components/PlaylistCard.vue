@@ -40,9 +40,11 @@ const props = defineProps<{
 
 const isDeleted = ref(false);
 
+const { $api } = useNuxtApp();
+
 function deletePlaylist() {
   isDeleted.value = true;
-  useApi("/api/playlists/{id}", {
+  $api("/api/playlists/{id}", {
     method: "DELETE",
     path: {
       id: props.playlist.id,

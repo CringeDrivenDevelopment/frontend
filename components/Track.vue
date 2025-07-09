@@ -197,10 +197,11 @@ const onError = (error: string) => {
 };
 
 // handlers
+const { $api } = useNuxtApp();
 
-function approveTrackHandler() {
+async function approveTrackHandler() {
   if (props.currentPlaylistId) {
-    useApi("/api/playlists/{playlist_id}/{track_id}/approve", {
+    await $api("/api/playlists/{playlist_id}/{track_id}/approve", {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${useAuth().token.value}`,
@@ -216,9 +217,9 @@ function approveTrackHandler() {
   }
 }
 
-function declineTrackHandler() {
+async function declineTrackHandler() {
   if (props.currentPlaylistId) {
-    useApi("/api/playlists/{playlist_id}/{track_id}/decline", {
+    await $api("/api/playlists/{playlist_id}/{track_id}/decline", {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${useAuth().token.value}`,
@@ -234,9 +235,9 @@ function declineTrackHandler() {
   }
 }
 
-function deleteTrackHandler() {
+async function deleteTrackHandler() {
   if (props.currentPlaylistId) {
-    useApi("/api/playlists/{playlist_id}/{track_id}/remove", {
+    await $api("/api/playlists/{playlist_id}/{track_id}/remove", {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${useAuth().token.value}`,

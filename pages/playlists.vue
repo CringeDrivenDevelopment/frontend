@@ -64,9 +64,11 @@ const { data: playlists, refresh, status } = useApi("/api/playlists", {
 const createFormOpened = ref(route.query.createFormOpened === "true");
 const playlistTitle = ref("");
 
+const { $api } = useNuxtApp();
+
 function createPlaylist() {
   if (playlistTitle.value !== "") {
-    useApi("/api/playlists/new", {
+    $api("/api/playlists/new", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${useAuth().token.value}`,
