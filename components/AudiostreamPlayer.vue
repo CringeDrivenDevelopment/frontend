@@ -3,7 +3,6 @@
     <audio
       ref="audioRef"
       controls
-      :src="audioSrc"
       @error="onError"
       @loadedmetadata="onLoadedMetadata"
       @timeupdate="onTimeUpdate"
@@ -13,11 +12,11 @@
       style="width: 100%;"
     ></audio>
     <div v-if="error" style="color: red;">{{ error }}</div>
+    <div v-if="isLoading" style="color: blue;">Loading audio stream...</div>
   </div>
   <audio
     v-else
     ref="audioRef"
-    :src="audioSrc"
     @error="onError"
     @loadedmetadata="onLoadedMetadata"
     @timeupdate="onTimeUpdate"
@@ -29,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import Hls from 'hls.js'
 
 // Props
@@ -62,8 +61,164 @@ const duration = ref(0)
 const volume = ref(1)
 
 let hls: any = null
+let isInitialized = ref(false)
+let retryCount = 0
+const maxRetries = 50 // Reduced from 100
+const retryDelay = 2000 // Increased to 2 seconds
+let isLoading = ref(false)
 
 const audioSrc = computed(() => props.src)
+
+// Helper function for retrying audio load
+async function loadAudioWithRetry(): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    if (!audioRef.value) {
+      reject(new Error('Audio element not available'))
+      return
+    }
+
+    let currentRetry = 0
+
+    const attemptLoad = () => {
+      if (!audioRef.value) {
+        reject(new Error('Audio element not available'))
+        return
+      }
+
+      const onLoadSuccess = () => {
+        audioRef.value?.removeEventListener('loadeddata', onLoadSuccess)
+        audioRef.value?.removeEventListener('error', onLoadError)
+        retryCount = 0
+        resolve()
+      }
+
+      const onLoadError = () => {
+        audioRef.value?.removeEventListener('loadeddata', onLoadSuccess)
+        audioRef.value?.removeEventListener('error', onLoadError)
+
+        if (currentRetry < maxRetries) {
+          currentRetry++
+          console.log(`Retrying audio load (attempt ${currentRetry}/${maxRetries})...`)
+          
+          setTimeout(() => {
+            if (audioRef.value) {
+              audioRef.value.src = audioSrc.value
+              attemptLoad()
+            }
+          }, retryDelay * currentRetry)
+        } else {
+          reject(new Error('Failed to load audio after retries'))
+        }
+      }
+
+      audioRef.value.addEventListener('loadeddata', onLoadSuccess, { once: true })
+      audioRef.value.addEventListener('error', onLoadError, { once: true })
+    }
+
+    audioRef.value.src = audioSrc.value
+    attemptLoad()
+  })
+}
+
+// Initialize HLS or native audio source
+async function initializeAudio(): Promise<void> {
+  if (isInitialized.value || !audioRef.value || isLoading.value) return
+
+  isLoading.value = true
+
+  try {
+    if (audioRef.value.canPlayType('application/vnd.apple.mpegurl')) {
+      await loadAudioWithRetry()
+    } else {
+      // Dynamically import hls.js
+      if (Hls.isSupported()) {
+        await new Promise<void>((resolve, reject) => {
+          hls = new Hls({
+            xhrSetup: xhr => {
+              xhr.setRequestHeader('Authorization', useAuth().token.value ?? '')
+            },
+            // Improved HLS config for better buffering
+            maxBufferLength: 60, // Increased buffer length
+            maxMaxBufferLength: 120, // Increased max buffer
+            lowLatencyMode: false,
+            backBufferLength: 30, // Keep more back buffer
+            maxBufferHole: 0.1, // Allow small gaps
+            maxBufferSize: 60 * 1000 * 1000, // 60MB buffer
+            maxLoadingDelay: 4,
+            liveSyncDurationCount: 3,
+            liveMaxLatencyDurationCount: 10,
+            enableWorker: true,
+            startLevel: -1, // Auto quality selection
+            debug: false // Disable debug logging
+          })
+          
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            retryCount = 0 // Reset retry count on success
+            error.value = null // Clear any previous errors
+            resolve()
+          })
+          
+          // Clear errors when media starts playing successfully
+          hls.on(Hls.Events.LEVEL_LOADED, () => {
+            error.value = null
+          })
+          
+          hls.on(Hls.Events.ERROR, (event: any, data: any) => {
+            // Don't log buffer stalled errors - they're normal during buffering
+            if (data.details !== 'bufferStalledError') {
+              console.error('HLS Error:', data)
+            }
+            
+            // Only retry on specific network errors
+            const shouldRetry = (
+              data.type === Hls.ErrorTypes.NETWORK_ERROR && 
+              (data.details === 'manifestLoadError' || data.details === 'levelLoadError')
+            ) && retryCount < maxRetries
+            
+            if (shouldRetry) {
+              retryCount++
+              console.log(`Retrying HLS load (attempt ${retryCount}/${maxRetries})...`)
+              
+              setTimeout(() => {
+                if (hls && !isInitialized.value) {
+                  hls.loadSource(audioSrc.value)
+                }
+              }, retryDelay * retryCount)
+              
+              return // Don't reject yet, we're retrying
+            }
+            
+            // For media errors that are not fatal, don't reject and don't log bufferStalledError
+            if (data.type === Hls.ErrorTypes.MEDIA_ERROR && !data.fatal) {
+              if (data.details !== 'bufferStalledError') {
+                console.warn('Non-fatal media error, continuing playback:', data.details)
+              }
+              return
+            }
+            
+            // If it's a fatal error or we've exhausted retries
+            const errorMessage = `Playback error: ${data.details}`
+            error.value = errorMessage
+            emit('error', errorMessage)
+            reject(new Error(errorMessage))
+          })
+          
+          hls.loadSource(audioSrc.value)
+          hls.attachMedia(audioRef.value!)
+        })
+      } else {
+        const errorMessage = 'HLS is not supported in this browser.'
+        error.value = errorMessage
+        emit('error', errorMessage)
+        throw new Error(errorMessage)
+      }
+    }
+    
+    isInitialized.value = true
+  } finally {
+    isLoading.value = false
+  }
+}
 
 // Audio event handlers
 function onError() {
@@ -102,9 +257,22 @@ function onEnded() {
 }
 
 // Control methods
-function play() {
-  if (audioRef.value) {
-    audioRef.value.play()
+async function play() {
+  if (isLoading.value) {
+    console.log('Already loading, please wait...')
+    return
+  }
+
+  try {
+    await initializeAudio()
+    if (audioRef.value && !isLoading.value) {
+      await audioRef.value.play()
+    }
+  } catch (err) {
+    console.error('Failed to play audio:', err)
+    const errorMessage = err instanceof Error ? err.message : 'Failed to play audio'
+    error.value = errorMessage
+    emit('error', errorMessage)
   }
 }
 
@@ -134,6 +302,28 @@ function setCurrentTime(time: number) {
   }
 }
 
+// Reset initialization when source changes
+function resetAudio() {
+  if (hls) {
+    hls.destroy()
+    hls = null
+  }
+  isInitialized.value = false
+  isLoading.value = false
+  retryCount = 0 // Reset retry count
+  error.value = null
+  if (audioRef.value) {
+    audioRef.value.pause()
+    audioRef.value.src = ''
+    audioRef.value.load() // Reset the audio element
+  }
+}
+
+// Watch for source changes and reset if needed
+watch(() => props.src, () => {
+  resetAudio()
+})
+
 // Expose methods to parent component
 defineExpose({
   play,
@@ -144,31 +334,13 @@ defineExpose({
   isPlaying: computed(() => isPlaying.value),
   currentTime: computed(() => currentTime.value),
   duration: computed(() => duration.value),
-  volume: computed(() => volume.value)
+  volume: computed(() => volume.value),
+  isLoading: computed(() => isLoading.value)
 })
 
 onMounted(async () => {
-  if (audioRef.value) {
-    if (audioRef.value.canPlayType('application/vnd.apple.mpegurl')) {
-      audioRef.value.src = audioSrc.value
-    } else {
-      // Dynamically import hls.js
-      if (Hls.isSupported()) {
-        hls = new Hls()
-        hls.loadSource(audioSrc.value)
-        hls.attachMedia(audioRef.value)
-        hls.on(Hls.Events.ERROR, (event: any, data: any) => {
-          const errorMessage = 'Playback error: ' + data.details
-          error.value = errorMessage
-          emit('error', errorMessage)
-        })
-      } else {
-        const errorMessage = 'HLS is not supported in this browser.'
-        error.value = errorMessage
-        emit('error', errorMessage)
-      }
-    }
-  }
+  // Audio element is ready, but we don't initialize the source yet
+  // Initialization will happen on first play
 })
 
 onBeforeUnmount(() => {

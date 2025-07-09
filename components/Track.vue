@@ -148,7 +148,7 @@ const trackId = computed(
   () => `track-${props.track.title}-${props.track.authors}-${props.track.id}`
 );
 
-const audioUrl = "/audio/output.m3u8";
+const audioUrl = `https://cloud.lxft.tech/api/youtube/${props.track.id}/hls.m3u8`;
 const playerRef = ref<InstanceType<typeof AudiostreamPlayer> | null>(null);
 
 // Состояние трека через глобальный плеер
