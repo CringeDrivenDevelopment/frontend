@@ -103,7 +103,7 @@ const downloadPlaylist = async () => {
       }
 
       await downloadFile({
-        file_name: 'playlist.zip',
+        file_name: `Playlist-${playlist.value?.title ?? String(Math.floor(Math.random() * 10000))}.zip`,
         url: `https://cloud.lxft.tech/api/youtube/${data.filename}`
       });
     }
