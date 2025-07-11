@@ -1,8 +1,8 @@
 <template>
   <button
     class="w-full p-2 flex flex-wrap items-center gap-2 rounded-lg cursor-pointer hover:bg-slate-500/15 transition-colors mb-2"
-    :class="{ 'bg-slate-300/15': selected }"
-    :disabled="selected && !(playlist.role === 'owner')"
+    :class="{ 'bg-slate-300/15': selected, 'animate-pulse': loading }"
+    :disabled="(selected && !(playlist.role === 'owner')) || loading"
     @click="toggleTrack"
   >
     <LucidePlus
@@ -27,9 +27,12 @@ const selected = ref(
   props.track.playlist_ids?.includes(props.playlist.id) ?? false
 );
 
+const loading = ref(false);
+
 const { $api } = useNuxtApp();
 
 async function toggleTrack() {
+  loading.value = true;
   if (!selected.value) {
     await $api("/api/playlists/{playlist_id}/{track_id}/submit", {
       method: "POST",
@@ -41,6 +44,7 @@ async function toggleTrack() {
         track_id: props.track.id,
       },
     });
+
     if (props.refreshTracks) {
       props.refreshTracks();
     }
@@ -61,5 +65,6 @@ async function toggleTrack() {
     }
     (selected as globalThis.Ref).value = false;
   }
+  loading.value = false;
 }
 </script>
