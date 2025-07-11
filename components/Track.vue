@@ -71,19 +71,19 @@
       <LucideX
         :size="27"
         class="hover:text-red-400 transition-colors duration-200"
-        v-if="mode == 'accepted'"
+        v-if="mode == 'accepted' && playlists.find((pl) => pl.id === props.currentPlaylistId)?.role === 'owner'"
         @click.stop="deleteTrackHandler"
       />
       <LucideCircleCheck
         :size="27"
         class="hover:text-green-400 transition-colors duration-200"
-        v-if="mode == 'moderation'"
+        v-if="mode == 'moderation' && ['moderator', 'owner'].includes(playlists.find((pl) => pl.id === props.currentPlaylistId)?.role ?? '')"
         @click.stop="approveTrackHandler"
       />
       <LucideBan
         :size="27"
         class="hover:text-red-400 transition-colors duration-200"
-        v-if="mode == 'moderation'"
+        v-if="mode == 'moderation' && ['moderator', 'owner'].includes(playlists.find((pl) => pl.id === props.currentPlaylistId)?.role ?? '')"
         @click.stop="declineTrackHandler"
       />
       <UiPopover v-if="mode == 'suggest'" @update:open="handleOpen">

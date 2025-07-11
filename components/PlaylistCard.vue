@@ -25,6 +25,7 @@
       :size="25"
       class="text-red-400 hover:text-red-500 transition-colors"
       @click.stop="deletePlaylist"
+      v-if="playlist.role === 'owner'"
     />
   </div>
 </template>

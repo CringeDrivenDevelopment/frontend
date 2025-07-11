@@ -1,7 +1,8 @@
 <template>
-  <div
+  <button
     class="w-full p-2 flex flex-wrap items-center gap-2 rounded-lg cursor-pointer hover:bg-slate-500/15 transition-colors mb-2"
     :class="{ 'bg-slate-300/15': selected }"
+    :disabled="selected && !(playlist.role === 'owner')"
     @click="toggleTrack"
   >
     <LucidePlus
@@ -10,7 +11,7 @@
       :class="{ 'rotate-45': selected }"
     />
     <span class="select-none">{{ playlist.title }}</span>
-  </div>
+  </button>
 </template>
 
 <script lang="ts" setup>
