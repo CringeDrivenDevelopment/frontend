@@ -22,7 +22,7 @@
         v-for="track in acceptedTracks"
         :key="track.id"
         :track="track"
-        :playlists="[]"
+        :playlists="playlists ?? []"
         :current-playlist-id="route.params.id.toString()"
         :refresh-tracks="refresh"
         mode="accepted"
@@ -37,7 +37,7 @@
         v-for="track in moderatedTracks"
         :key="track.id"
         :track="track"
-        :playlists="[]"
+        :playlists="playlists ?? []"
         :current-playlist-id="route.params.id.toString()"
         :refresh-tracks="refresh"
         mode="moderation"
@@ -58,6 +58,12 @@ const { data: playlist, status, refresh } = useApi("/api/playlists/{id}", {
   path: {
     id: route.params.id.toString(),
   },
+  headers: {
+    Authorization: `Bearer ${useAuth().token.value}`,
+  },
+});
+
+const { data: playlists } = useApi("/api/playlists", {
   headers: {
     Authorization: `Bearer ${useAuth().token.value}`,
   },

@@ -129,6 +129,11 @@ import { useGlobalPlayer } from "~/composables/useGlobalPlayer";
 
 const selectOpened = ref(false);
 
+onMounted(() => {
+  console.log(props.playlists, props.currentPlaylistId);
+  console.log(['moderator', 'owner'].includes(props.playlists.find((pl) => pl.id === props.currentPlaylistId)?.role ?? ''));
+})
+
 const props = defineProps<{
   track: components["schemas"]["Track"];
   playlists: components["schemas"]["Playlist"][];
